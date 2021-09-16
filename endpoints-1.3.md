@@ -10,7 +10,7 @@
     16/9 -Siguientes Endpoints a desarrollar:
 
     	· GET /users/validate/:registrationCode -----> Validar un usuario recién registrado.
-
+    	· POST /sellretro/:IDProduct -----> Botón EDITAR
 
 
 

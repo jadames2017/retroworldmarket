@@ -1,12 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////        SIN TERMINAR        ////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
 /////////////////////////////////////////////////////////////////
 /// Función controladora para subir un nuevo producto a la BD ///
 /////////////////////////////////////////////////////////////////
-
-//const { th } = require('date-fns/locale'); // Y ESTO???????????????????? Apareció aquí hoy (15/9)
 
 // Necesitamos conectarnos a la BD (getDB)
 const getDB = require('../../ddbb/getDB.js');
@@ -48,7 +42,7 @@ const newProduct = async (req, res, next) => {
     } = req.body;
 
     // Para confirmar que el usuario nos dé todos los datos que le pedimos, vamos a
-    // hacer que si faltan datos se lance un error:
+    // hacer que si faltan datos se lance un error y creamos el status del error:
     if (
       !idUser ||
       !nameProduct ||
@@ -59,7 +53,12 @@ const newProduct = async (req, res, next) => {
       !description ||
       !price
     ) {
-      throw new Error('Falta algún campo');
+      // Creamos la variable error, le asignamos un status code y lanzamos el error.
+      // Este error sera recogido por el CATCH, y enviado al Middleware de error en server.js
+      // que lo administrará.
+      const error = new Error('Falta algún campo');
+      error.httpStatus = 400;
+      throw error;
     }
 
     // Vamos a comprobar que el usuario ya exista en la BD (si no existe, no puede subir un producto):
@@ -71,7 +70,9 @@ const newProduct = async (req, res, next) => {
     );
     // Si no existe lanzamos un mensaje de error:
     if (user.length < 1) {
-      throw new Error('El usuario seleccionado no existe');
+      const error = new Error('El usuario seleccionado no existe');
+      error.httpStatus = 400;
+      throw error;
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
