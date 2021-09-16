@@ -5,7 +5,6 @@ const express = require('express');
 // Requerimos la dependencia morgan, que sirve, básicamente,  para registrar
 // los detalles de las solicitudes al servidor. Es un "Logger".
 const morgan = require('morgan');
-const createUser = require('./controllers/users/createUser.js');
 
 const { PORT } = process.env;
 
@@ -34,40 +33,10 @@ const newProduct = require('./controllers/ventas/newProduct.js');
 //      en la carpeta CONTROLLERS para hacer el código más limpio y organizado:
 app.post('/sellretro', newProduct);
 
-/**
- *
- * ***********************
- * **ENDPOINTS USUARIOS***
- * ***********************
- */
-
-app.post('/users', createUser);
-
 app.use((req, res) => {
   res.send('clarinete');
   console.log('vamos');
 });
-//////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////
-/// Middleware de error ///
-///////////////////////////
-
-// Aquí llega si entra un "next(error)"
-app -
-  use((error, req, res, next) => {
-    console.error(error);
-    // Definimos el status de la respuesta al cliente: Si el error tiene un status code, lo
-    // enviamos, sino le asignamos el code 500 (El servidor ha encontrado una situación que
-    // no sabe cómo manejarla.)
-    res.status(error.httpStatus || 500).send({
-      status: 'error',
-      message: error.message,
-    });
-  });
-
-///////////////////////////////
-/// Middleware de not found ///
-///////////////////////////////
 
 app.use((req, res) => {
   res.status(404).send({
@@ -76,10 +45,7 @@ app.use((req, res) => {
   });
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-// Función para poner a funcionar el servido en el puerto dado: //
-//////////////////////////////////////////////////////////////////
+// Función para poner a funcionar el servido en el puerto dado:
 app.listen(PORT, () => {
   console.log(`Conectado al puerto: ${PORT}`);
 });
